@@ -30,16 +30,11 @@
         #announcements-container h2 {
             color: #f25dff;
             margin: 0 0 10px;
-            text-align: center;
         }
         #announcements-container p {
             color: #ffffff;
             margin: 0 0 8px;
             line-height: 1.4;
-        }
-
-        .timestamp {
-            color: #860a0a;
         }
 
         .container {
@@ -144,6 +139,12 @@
         <h2>Latest Announcements</h2>
         
       <div class="announcement">
+          <div class="timestamp">1/5/2025, 4:59:25 AM</div>
+          <p>yes</p>
+      </div>
+      
+
+      <div class="announcement">
           <div class="timestamp">1/4/2025, 12:52:38 AM</div>
           <p>my nigga</p>
       </div>
@@ -192,7 +193,21 @@
             targetStatusDiv.style.color = color;
             targetStatusDiv.style.opacity = 1; 
         };
-    
+        
+        const startPinging = () => {
+            pingInterval = setInterval(() => {
+                if (ws.readyState === WebSocket.OPEN) {
+                    ws.send(JSON.stringify({ action: "ping" }));
+                    //console.log("Ping sent");
+                }
+            }, 3000);
+        };
+
+        const stopPinging = () => {
+            clearInterval(pingInterval);
+            //console.log("Ping stopped");
+        };
+
         ws.onmessage = (event) => {
             try {
                 const response = JSON.parse(event.data);
@@ -200,6 +215,7 @@
     
                 if (response.status === "authenticated") {
                     updateStatus("Login successful!", "green", "login");
+                    stopPinging(); 
                     loginContainer.style.animation = "fadeOut 0.5s ease-out";
                     setTimeout(() => {
                         loginContainer.style.display = "none";
@@ -227,7 +243,9 @@
         ws.onerror = () => {
             updateStatus("Connection error. Ensure the loader is still active!", "red", "login");
         };
-    
+
+        ws.onopen = startPinging;
+
         loginButton.addEventListener('click', () => {
             const licenseKey = licenseKeyInput.value.trim();
     
