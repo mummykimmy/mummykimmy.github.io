@@ -139,6 +139,12 @@
         <h2>Latest Announcements</h2>
         
       <div class="announcement">
+          <div class="timestamp">1/5/2025, 8:09:08 PM</div>
+          <p>i will message again</p>
+      </div>
+      
+
+      <div class="announcement">
           <div class="timestamp">1/5/2025, 7:46:10 PM</div>
           <p>my mobile 2 phones</p>
       </div>
@@ -147,6 +153,7 @@
 
     <div class="container" id="login-container">
         <!-- LOGIN-PLACEHOLDER -->
+        <div id="status"></div>
     </div>
 
     <div class="container" id="inject-container">
@@ -225,18 +232,21 @@
 
         ws.onopen = startPinging;
 
-        loginButton.addEventListener('click', () => {
-            const licenseKey = licenseKeyInput.value.trim();
-    
-            if (!licenseKey) {
-                updateStatus("Please enter a license key.", "red", "login");
-                return;
-            }
-    
-            ws.send(JSON.stringify({ action: "auth_request", key: licenseKey }));
-            updateStatus("Attempting login...", "blue", "login");
-        });
-    
+
+        if (licenseKeyInput && loginButton) {
+            loginButton.addEventListener('click', () => {
+                const licenseKey = licenseKeyInput.value.trim();
+        
+                if (!licenseKey) {
+                    updateStatus("Please enter a license key.", "red", "login");
+                    return;
+                }
+        
+                ws.send(JSON.stringify({ action: "auth_request", key: licenseKey }));
+                updateStatus("Attempting login...", "blue", "login");
+            });
+        }
+
         injectButton.addEventListener('click', () => {
             ws.send(JSON.stringify({ action: "inject_command" }));
             injectButton.style.display = "none"; 
