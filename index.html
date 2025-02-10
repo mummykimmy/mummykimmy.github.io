@@ -1,257 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MO2 Loader</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background: #161818;
-            overflow: hidden;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MO2 Loader</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background: #161818;
+      overflow: hidden;
+    }
 
-        #announcements-container {
-            width: 320px;
-            background: #292929;
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            margin-bottom: 20px;
-            max-height: 150px; 
-            overflow-y: auto;
-        }
-        #announcements-container h2 {
-            color: #f25dff;
-            margin: 0 0 10px;
-        }
-        #announcements-container p {
-            color: #ffffff;
-            margin: 0 0 8px;
-            line-height: 1.4;
-        }
+    #announcements-container {
+      width: 320px;
+      background: #292929;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      margin-bottom: 20px;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+    #announcements-container h2 {
+      color: #f25dff;
+      margin: 0 0 10px;
+    }
+    #announcements-container p {
+      color: #ffffff;
+      margin: 0 0 8px;
+      line-height: 1.4;
+    }
 
-        .container {
-            background: #292929;
-            padding: 30px 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            width: 320px;
-            text-align: center;
-            animation: fadeIn 0.5s ease-out;
-        }
+    .container {
+      background: #292929;
+      padding: 30px 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      width: 320px;
+      text-align: center;
+      animation: fadeIn 0.5s ease-out;
+    }
 
-        .container h2 {
-            color: #f25dff;
-        }
+    .container h2 {
+      color: #f25dff;
+    }
 
-        input {
-            width: calc(100% - 20px);
-            padding: 12px;
-            margin: 12px 0;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            transition: border-color 0.3s ease-in-out;
-        }
+    input {
+      width: calc(100% - 20px);
+      padding: 12px;
+      margin: 12px 0;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      transition: border-color 0.3s ease-in-out;
+    }
 
-        input:focus {
-            border-color: #f25dff;
-            outline: none;
-        }
+    input:focus {
+      border-color: #f25dff;
+      outline: none;
+    }
 
-        button {
-            padding: 12px 20px;
-            background: #f25dff;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: transform 0.2s, background 0.3s ease-in-out;
-        }
+    button {
+      padding: 12px 20px;
+      background: #f25dff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: transform 0.2s, background 0.3s ease-in-out;
+    }
 
-        button:disabled {
-            background: #ddd;
-            cursor: not-allowed;
-        }
+    button:disabled {
+      background: #ddd;
+      cursor: not-allowed;
+    }
 
-        button:hover:not(:disabled) {
-            transform: translateY(-2px);
-            background: #c635d3;
-        }
+    button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      background: #c635d3;
+    }
 
-        #status {
-            margin-top: 10px;
-            color: red;
-            font-weight: bold;
-            opacity: 0;
-            animation: fadeInStatus 0.3s ease forwards;
-        }
+    #status {
+      margin-top: 10px;
+      color: red;
+      font-weight: bold;
+      opacity: 0;
+      animation: fadeInStatus 0.3s ease forwards;
+    }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-        @keyframes fadeInStatus {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
+    @keyframes fadeInStatus {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
 
-        #inject-container {
-            display: none;
-        }
+    #inject-container {
+      display: none;
+    }
 
-        #inject-button {
-            animation: pulse 1.5s infinite;
-        }
+    #inject-button {
+      animation: pulse 1.5s infinite;
+    }
 
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-        }
-    </style>
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+    }
+
+    #auth-message-box {
+      width: 320px;
+      background: #292929;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      margin-top: 20px;
+      color: #ffffff;
+      display: none;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
+  <div id="announcements-container">
+    <h2>Latest Announcements</h2>
+    <!-- ANNOUNCEMENTS-PLACEHOLDER -->
+  </div>
 
-    <div id="announcements-container">
-        <h2>Latest Announcements</h2>
-        
-      <div class="announcement">
-          <div class="timestamp">1/5/2025, 8:09:08 PM</div>
-          <p>i will message again</p>
-      </div>
-      
+  <div class="container" id="login-container">
+    <!-- LOGIN-PLACEHOLDER -->
+    <div id="status"></div>
+  </div>
 
-      <div class="announcement">
-          <div class="timestamp">1/5/2025, 7:46:10 PM</div>
-          <p>my mobile 2 phones</p>
-      </div>
-      
-    </div>
+  <div class="container" id="inject-container">
+    <h2>MO2 Loader</h2>
+    <button id="inject-button">Inject</button>
+    <div id="status"></div>
+  </div>
 
-    <div class="container" id="login-container">
-        <!-- LOGIN-PLACEHOLDER -->
-        <div id="status"></div>
-    </div>
+  <div id="auth-message-box"></div>
 
-    <div class="container" id="inject-container">
-        <h2>MO2 Loader</h2>
-        <button id="inject-button">Inject</button>
-        <div id="status"></div>
-    </div>
+  <script>
+    const ws = new WebSocket('ws://localhost:1447');
 
-    <script>
-        const ws = new WebSocket('ws://localhost:1447');
-    
-        const loginContainer = document.getElementById('login-container');
-        const injectContainer = document.getElementById('inject-container');
-        const licenseKeyInput = document.getElementById('license-key');
-        const loginButton = document.getElementById('login-button');
-        const injectButton = document.getElementById('inject-button');
-        const loginStatusDiv = loginContainer.querySelector('#status');
-        const injectStatusDiv = injectContainer.querySelector('#status');
-    
-        const updateStatus = (message, color = 'blue', container = 'login') => {
-            const targetStatusDiv = container === 'login' ? loginStatusDiv : injectStatusDiv;
-            targetStatusDiv.textContent = message;
-            targetStatusDiv.style.color = color;
-            targetStatusDiv.style.opacity = 1; 
-        };
-        
-        const startPinging = () => {
-            pingInterval = setInterval(() => {
-                if (ws.readyState === WebSocket.OPEN) {
-                    ws.send(JSON.stringify({ action: "ping" }));
-                    //console.log("Ping sent");
-                }
-            }, 500);
-        };
+    const loginContainer = document.getElementById('login-container');
+    const injectContainer = document.getElementById('inject-container');
+    const licenseKeyInput = document.getElementById('license-key');
+    const loginButton = document.getElementById('login-button');
+    const injectButton = document.getElementById('inject-button');
+    const loginStatusDiv = loginContainer.querySelector('#status');
+    const injectStatusDiv = injectContainer.querySelector('#status');
 
-        const stopPinging = () => {
-            clearInterval(pingInterval);
-            //console.log("Ping stopped");
-        };
+    const updateStatus = (message, color = 'blue', container = 'login') => {
+      const targetStatusDiv = container === 'login' ? loginStatusDiv : injectStatusDiv;
+      targetStatusDiv.textContent = message;
+      targetStatusDiv.style.color = color;
+      targetStatusDiv.style.opacity = 1;
+    };
 
-        ws.onmessage = (event) => {
-            try {
-                const response = JSON.parse(event.data);
-                console.log(response);
-    
-                if (response.status === "authenticated") {
-                    updateStatus("Login successful!", "green", "login");
-                    stopPinging(); 
-                    loginContainer.style.animation = "fadeOut 0.5s ease-out";
-                    setTimeout(() => {
-                        loginContainer.style.display = "none";
-                        injectContainer.style.display = "block";
-                        injectContainer.style.animation = "fadeIn 0.5s ease-in";
-                    }, 500);
-                } else if (response.status === "unauthenticated") {
-                    updateStatus("Invalid license key.", "red", "login");
-                } else if (response.status === "injection_complete") {
-                    injectButton.style.display = "none";
-                    updateStatus("Injection complete. You can now close this page.", "green", "inject");
-                }
-                else if (response.status === "inject_msg") {
-                    updateStatus(response.message, "green", "inject");
-                } 
-                else if (response.status === "error") {
-                    updateStatus(response.message, "red", "inject");
-                }
-            } catch (e) {
-                console.error("Error parsing message:", e);
-                updateStatus("Invalid message.", "red", "login");
-            }
-        };
-    
-        ws.onerror = () => {
-            updateStatus("Connection error. Ensure the loader is still active!", "red", "login");
-        };
+    let pingInterval;
+    const startPinging = () => {
+      pingInterval = setInterval(() => {
+        if (ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({ action: "ping" }));
+          //console.log("Ping sent");
+        }
+      }, 500);
+    };
 
-        ws.onopen = startPinging;
+    const stopPinging = () => {
+      clearInterval(pingInterval);
+      //console.log("Ping stopped");
+    };
 
+    ws.onmessage = (event) => {
+      try {
+        const response = JSON.parse(event.data);
+        console.log(response);
 
-        if (licenseKeyInput && loginButton) {
-            loginButton.addEventListener('click', () => {
-                const licenseKey = licenseKeyInput.value.trim();
-        
-                if (!licenseKey) {
-                    updateStatus("Please enter a license key.", "red", "login");
-                    return;
-                }
-        
-                ws.send(JSON.stringify({ action: "auth_request", key: licenseKey }));
-                updateStatus("Attempting login...", "blue", "login");
-            });
+        if (response.status === "authenticated") {
+          updateStatus("Login successful!", "green", "login");
+          stopPinging();
+          loginContainer.style.animation = "fadeOut 0.5s ease-out";
+          setTimeout(() => {
+            loginContainer.style.display = "none";
+            injectContainer.style.display = "block";
+            injectContainer.style.animation = "fadeIn 0.5s ease-in";
+          }, 500);
+          if (response.authMessage) {
+            const authMessageBox = document.getElementById('auth-message-box');
+            authMessageBox.textContent = response.authMessage;
+            authMessageBox.style.display = 'block';
+          }
+        } else if (response.status === "unauthenticated") {
+          updateStatus("Invalid license key.", "red", "login");
+        } else if (response.status === "injection_complete") {
+          injectButton.style.display = "none";
+          updateStatus("Injection complete. You can now close this page.", "green", "inject");
+        } else if (response.status === "inject_msg") {
+          updateStatus(response.message, "green", "inject");
+        }
+        else if (response.status === "auth_message") {
+          const authMessageBox = document.getElementById('auth-message-box');
+          authMessageBox.textContent = response.message;
+          authMessageBox.style.display = 'block';
+        } else if (response.status === "error") {
+          updateStatus(response.message, "red", "inject");
+        }
+      } catch (e) {
+        console.error("Error parsing message:", e);
+        updateStatus("Invalid message.", "red", "login");
+      }
+    };
+
+    ws.onerror = () => {
+      updateStatus("Connection error. Ensure the loader is still active!", "red", "login");
+    };
+
+    ws.onopen = startPinging;
+
+    if (licenseKeyInput && loginButton) {
+      loginButton.addEventListener('click', () => {
+        const licenseKey = licenseKeyInput.value.trim();
+
+        if (!licenseKey) {
+          updateStatus("Please enter a license key.", "red", "login");
+          return;
         }
 
-        injectButton.addEventListener('click', () => {
-            ws.send(JSON.stringify({ action: "inject_command" }));
-            injectButton.style.display = "none"; 
-            updateStatus("Injecting...", "blue", "inject");
-        });
-    </script>
+        ws.send(JSON.stringify({ action: "auth_request", key: licenseKey }));
+        updateStatus("Attempting login...", "blue", "login");
+      });
+    }
+
+    injectButton.addEventListener('click', () => {
+      ws.send(JSON.stringify({ action: "inject_command" }));
+      injectButton.style.display = "none";
+      updateStatus("Injecting...", "blue", "inject");
+    });
+  </script>
 </body>
 </html>
