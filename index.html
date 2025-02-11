@@ -143,6 +143,12 @@
       display: none;
       text-align: center;
     }
+
+    #license-time {
+      margin-top: 10px;
+      color: #f25dff;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -158,6 +164,7 @@
 
   <div class="container" id="inject-container">
     <h2>MO2 Loader</h2>
+    <div id="license-time">License Time Remaining: --</div>
     <button id="inject-button">Inject</button>
     <div id="status"></div>
   </div>
@@ -174,12 +181,17 @@
     const injectButton = document.getElementById('inject-button');
     const loginStatusDiv = loginContainer.querySelector('#status');
     const injectStatusDiv = injectContainer.querySelector('#status');
+    const licenseTimeDiv = document.getElementById('license-time');
 
     const updateStatus = (message, color = 'blue', container = 'login') => {
       const targetStatusDiv = container === 'login' ? loginStatusDiv : injectStatusDiv;
       targetStatusDiv.textContent = message;
       targetStatusDiv.style.color = color;
       targetStatusDiv.style.opacity = 1;
+    };
+
+    const updateLicenseTime = (time) => {
+      licenseTimeDiv.textContent = `License Time Remaining: ${time}`;
     };
 
     let pingInterval;
@@ -216,6 +228,9 @@
             authMessageBox.textContent = response.authMessage;
             authMessageBox.style.display = 'block';
           }
+          if (response.licenseTime) {
+            updateLicenseTime(response.licenseTime);
+          }
         } else if (response.status === "unauthenticated") {
           updateStatus("Invalid license key.", "red", "login");
         } else if (response.status === "injection_complete") {
@@ -223,13 +238,14 @@
           updateStatus("Injection complete. You can now close this page.", "green", "inject");
         } else if (response.status === "inject_msg") {
           updateStatus(response.message, "green", "inject");
-        }
-        else if (response.status === "auth_message") {
+        } else if (response.status === "auth_message") {
           const authMessageBox = document.getElementById('auth-message-box');
           authMessageBox.textContent = response.message;
           authMessageBox.style.display = 'block';
         } else if (response.status === "error") {
           updateStatus(response.message, "red", "inject");
+        } else if (response.status === "license_time_update") {
+          updateLicenseTime(response.time);
         }
       } catch (e) {
         console.error("Error parsing message:", e);
