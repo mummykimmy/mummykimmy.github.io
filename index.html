@@ -226,7 +226,7 @@
         }
         else if (response.status === "auth_message") {
           const authMessageBox = document.getElementById('auth-message-box');
-          authMessageBox.textContent = "Time Left: " + response.message;
+          authMessageBox.textContent = response.message;
           authMessageBox.style.display = 'block';
         } else if (response.status === "error") {
           updateStatus(response.message, "red", "inject");
