@@ -213,7 +213,7 @@
           }, 500);
           if (response.authMessage) {
             const authMessageBox = document.getElementById('auth-message-box');
-            authMessageBox.textContent = response.authMessage;
+            authMessageBox.textContent = "Time Left: " + response.message;
             authMessageBox.style.display = 'block';
           }
         } else if (response.status === "unauthenticated") {
@@ -226,7 +226,7 @@
         }
         else if (response.status === "auth_message") {
           const authMessageBox = document.getElementById('auth-message-box');
-          authMessageBox.textContent = response.message;
+          authMessageBox.textContent = "Time Left: " + response.message;
           authMessageBox.style.display = 'block';
         } else if (response.status === "error") {
           updateStatus(response.message, "red", "inject");
